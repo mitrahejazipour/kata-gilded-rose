@@ -11,6 +11,10 @@ class Item:
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
 
+list_names = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert",
+              "Sulfuras, Hand of Ragnaros"]
+
+
 class GildedRose(object):
     def __init__(self, items):
         self.items = items
@@ -19,36 +23,28 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-            if (
-                item.name != "Aged Brie"
-                and item.name != "Backstage passes to a TAFKAL80ETC concert"
-            ):
-                if item.quality > 0:
-                    if item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality = item.quality - 1
-            else:
-                if item.quality < 50:
+            if item.name not in list_names and item.quality > 0:
+                item.quality = item.quality - 1
+
+            if item.name in list_names and item.quality < 50:
+                item.quality = item.quality + 1
+            if item.name == "Backstage passes to a TAFKAL80ETC concert":
+                if item.sell_in < 11 and item.quality < 50:
                     item.quality = item.quality + 1
-                    if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                        if item.sell_in < 11:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
-                        if item.sell_in < 6:
-                            if item.quality < 50:
-                                item.quality = item.quality + 1
+                if item.sell_in < 6 and item.quality < 50:
+                    item.quality = item.quality + 1
             if item.name != "Sulfuras, Hand of Ragnaros":
                 item.sell_in = item.sell_in - 1
+
+            
             if item.sell_in < 0:
-                if item.name != "Aged Brie":
-                    if item.name != "Backstage passes to a TAFKAL80ETC concert":
-                        if item.quality > 0:
-                            if item.name != "Sulfuras, Hand of Ragnaros":
-                                item.quality = item.quality - 1
-                    else:
-                        item.quality = item.quality - item.quality
-                else:
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
+                if item.name not in list_names and item.quality > 0:
+                    item.quality = item.quality - 1
+                if item.name in ["Backstage passes to a TAFKAL80ETC concert"]:
+                    item.quality = item.quality - item.quality
+                
+                if item.name == "Aged Brie" and item.quality < 50:
+                    item.quality = item.quality + 1
 
 
 if __name__ == "__main__":
